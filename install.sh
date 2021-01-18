@@ -1,5 +1,7 @@
 #/usr/env bash
 
+echo "alias dgit='git --git-dir ~/.dotfiles/.git --work-tree=\$HOME'"
+
 sudo apt update && sudo apt upgrade
 
 sudo apt install curl
