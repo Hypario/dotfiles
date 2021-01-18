@@ -99,11 +99,6 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 export DEFAULT_USER=hypario
 
-export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-
-export ANDROID_SDK_ROOT=/home/hypario/android
-export PATH=${PATH}:${ANDROID_SDK_ROOT}/emulator
-
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
