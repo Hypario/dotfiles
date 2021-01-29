@@ -18,6 +18,11 @@ fail() {
   exit $?
 }
 
+prompt() {
+  printf "\r\n [ \033[00;34m?\033[0m ] $1"
+  read $2
+}
+
 symlinker() {
   info 'Symlinking dotfiles'
 
