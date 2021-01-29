@@ -77,7 +77,5 @@ if [ $choice == "y" ]; then
 		success "done"
 	fi
 
-	info "symlinking all dotfiles"
 	symlinker
-	success "done"
 fi

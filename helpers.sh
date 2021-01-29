@@ -34,4 +34,6 @@ symlinker() {
     ln -sf "$file" "$dest"
     success "linked $file to $dest"
   done
+  
+  success "done"
 }
