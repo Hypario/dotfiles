@@ -62,7 +62,10 @@ if [ $choice == "y" ]; then
 	fi
 
 	# install discord
-	TEMP_DEB="$(mktemp)"
-	wget -O "$TEMP_DEB" 'https://discord.com/api/download?platform=linux&format=deb' | sudo dpkg -i "$TEMP_DEB"
-	rm -rf "$TEMP_DEB"
+	read -p "Install discord ? (y/n) " answer_discord
+	if [ $answer_discord == "y" ]; then
+		TEMP_DEB="$(mktemp)"
+		wget -O "$TEMP_DEB" 'https://discord.com/api/download?platform=linux&format=deb' | sudo dpkg -i "$TEMP_DEB"
+		rm -rf "$TEMP_DEB"
+	fi
 fi
