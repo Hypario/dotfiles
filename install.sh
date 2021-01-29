@@ -11,8 +11,8 @@ if [ $choice == "y" ]; then
 		ln -sf $(pwd) "$HOME/dotfiles"
 	fi
 
-	sudo apt update && sudo apt upgrade
-	sudo apt install curl vim -y
+	sudo apt update && sudo apt upgrade -y
+	sudo apt install curl vim zsh -y
 
 	if [ ! command -v git ]; then
 		echo "installing git"
