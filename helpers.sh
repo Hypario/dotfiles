@@ -28,7 +28,7 @@ symlinker() {
 
   local overwrite=true overwrite_all=true backup_all=false skip_all=false
 
-  for file in $(find -H "$(pwd)" -maxdepth 3 -name '*.symlink'); do
+  for file in $(find -H "$HOME/dotfiles" -maxdepth 3 -name '*.symlink'); do
     local dest="$HOME/.$(basename "${file%.*}")"
 
     ln -sf "$file" "$dest"
