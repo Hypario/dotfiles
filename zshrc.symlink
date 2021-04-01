@@ -108,3 +108,4 @@ export NVM_DIR="$HOME/.nvm"
 
 alias myip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias reload="exec $SHELL -l"
+alias update="sudo apt update && sudo apt upgrade -y"
