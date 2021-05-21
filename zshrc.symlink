@@ -110,3 +110,7 @@ alias myip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias reload="exec $SHELL -l"
 alias update="sudo apt update && sudo apt upgrade -y"
 alias ubuntu-update="sudo do-release-upgrade"
+
+if command -v tmux > /dev/null; then
+	[[ ! $TERM =~ screen ]] && [ -z $TMUX ] && exec tmux
+fi
