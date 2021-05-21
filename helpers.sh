@@ -40,12 +40,11 @@ symlinker() {
 
 checkUpdate() {
 	cd $HOME/dotfiles > /dev/null
-
-	REMOTE=$(git rev-parse --abbrev-ref ${u} | sed 's/\// /g' | cut -f1) # upstream name
+	
+	REMOTE=$(git ls-remote origin | cut -f1)
 	LOCAL=$(git rev-parse HEAD)
 
 	cd - > /dev/null
-
 	if [ $LOCAL = $REMOTE ]; then
 		return -1;
 	else
