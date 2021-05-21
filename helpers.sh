@@ -44,6 +44,7 @@ checkUpdate() {
 	LOCAL=$(git rev-parse @) # local commit hash
 	REMOTE=$(git rev-parse "$UPSTREAM")
 	BASE=$(git merge-base @ "$UPSTREAM")
+	cd - > /dev/null
 
 	if [ $LOCAL = $REMOTE ]; then
 		return -1;
@@ -53,7 +54,6 @@ checkUpdate() {
 		# branches diverged, can't update
 		return -1;
 	fi
-	cd -
 }
 
 updateDotfiles() {
