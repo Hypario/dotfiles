@@ -39,7 +39,7 @@ symlinker() {
 }
 
 checkUpdate() {
-	cd $HOME/dotfiles
+	cd $HOME/dotfiles > /dev/null
 	UPSTREAM=${1:-'@{u}'} # upstream commit hash
 	LOCAL=$(git rev-parse @) # local commit hash
 	REMOTE=$(git rev-parse "$UPSTREAM")
