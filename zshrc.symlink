@@ -113,3 +113,5 @@ alias update="sudo apt update && sudo apt upgrade -y"
 if command -v tmux > /dev/null; then
 	[[ ! $TERM =~ screen ]] && [ -z $TMUX ] && exec tmux
 fi
+
+source helpers.sh

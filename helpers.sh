@@ -37,3 +37,31 @@ symlinker() {
   
   success "done"
 }
+
+checkUpdate() {
+	UPSTREAM=${1:-'@{u}'} # upstream commit hash
+	LOCAL=$(git rev-parse @) # local commit hash
+	REMOTE=$(git rev-parse "$UPSTREAM")
+	BASE=$(git merge-base @ "$UPSTREAM")
+
+	if [ $LOCAL = $REMOTE ]; then
+		return false;
+	elif [ $LOCAL = $BASE ]; then
+		return true;
+	else
+		# branches diverged, can't update
+		return false;
+	fi
+}
+
+updateDotfiles() {
+	if [ checkUpdate ]; then
+		prompt "Update detected for your dotfiles, do you wanna update ? (y/n) " choice
+		choice=${choice,,}
+		if [[ "$choice" =~ ^(yes|y)$ ]]; then
+			cd $HOME/dotfiles
+			git pull origin master
+			cd -
+		fi
+	fi
+}
