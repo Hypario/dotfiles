@@ -59,10 +59,10 @@ checkUpdate() {
 updateDotfiles() {
 	if [ checkUpdate ]; then
 		prompt "Update detected for your dotfiles, do you wanna update ? (y/n) " choice
-		choice=$(echo "$choice" | tr '[:upper:] [:lower:]')
+		choice=$(echo "$choice" | tr '[:upper:]' '[:lower:]')
 		if [[ "$choice" =~ ^(yes|y)$ ]]; then
 			cd $HOME/dotfiles
-			git pull origin master
+			git pull
 			cd -
 		fi
 	fi
