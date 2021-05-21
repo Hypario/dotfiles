@@ -64,7 +64,7 @@ updateDotfiles() {
 		if [[ "$choice" =~ ^(yes|y)$ ]]; then
 			cd $HOME/dotfiles
 			git pull
-			cd -
+			cd - > /dev/null
 		fi
 	fi
 }
