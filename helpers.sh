@@ -46,18 +46,19 @@ checkUpdate() {
 	BASE=$(git merge-base @ "$UPSTREAM")
 
 	if [ $LOCAL = $REMOTE ]; then
-		return false;
+		return -1;
 	elif [ $LOCAL = $BASE ]; then
-		return true;
+		return 0;
 	else
 		# branches diverged, can't update
-		return false;
+		return -1;
 	fi
 	cd -
 }
 
 updateDotfiles() {
-	if [ checkUpdate ]; then
+	checkUpdate
+	if [ $? -eq 0 ]; then
 		prompt "Update detected for your dotfiles, do you wanna update ? (y/n) " choice
 		choice=$(echo "$choice" | tr '[:upper:]' '[:lower:]')
 		if [[ "$choice" =~ ^(yes|y)$ ]]; then
