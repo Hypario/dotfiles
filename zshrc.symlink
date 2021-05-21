@@ -115,3 +115,5 @@ if command -v tmux > /dev/null; then
 fi
 
 source helpers.sh
+
+updateDotfiles
