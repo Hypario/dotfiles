@@ -118,5 +118,3 @@ fi
 source helpers.sh
 
 updateDotfiles
-
-info "welcome !"

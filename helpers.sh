@@ -39,6 +39,7 @@ symlinker() {
 }
 
 checkUpdate() {
+	cd $HOME/dotfiles
 	UPSTREAM=${1:-'@{u}'} # upstream commit hash
 	LOCAL=$(git rev-parse @) # local commit hash
 	REMOTE=$(git rev-parse "$UPSTREAM")
@@ -52,6 +53,7 @@ checkUpdate() {
 		# branches diverged, can't update
 		return false;
 	fi
+	cd -
 }
 
 updateDotfiles() {
