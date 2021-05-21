@@ -41,7 +41,7 @@ symlinker() {
 checkUpdate() {
 	cd $HOME/dotfiles > /dev/null
 	
-	REMOTE=$(git ls-remote origin | cut -f1)
+	REMOTE=$(git ls-remote origin master | cut -f1)
 	LOCAL=$(git rev-parse HEAD)
 
 	cd - > /dev/null
