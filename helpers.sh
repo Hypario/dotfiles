@@ -62,7 +62,7 @@ updateDotfiles() {
 		prompt "Update detected for your dotfiles, do you wanna update ? (y/n) " choice
 		choice=$(echo "$choice" | tr '[:upper:]' '[:lower:]')
 		if [[ "$choice" =~ ^(yes|y)$ ]]; then
-			cd $HOME/dotfiles
+			cd $HOME/dotfiles > /dev/null
 			git pull
 			cd - > /dev/null
 		fi
