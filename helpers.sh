@@ -40,19 +40,16 @@ symlinker() {
 
 checkUpdate() {
 	cd $HOME/dotfiles > /dev/null
-	UPSTREAM=${1:-'@{u}'} # upstream commit hash
-	LOCAL=$(git rev-parse @) # local commit hash
-	REMOTE=$(git rev-parse "$UPSTREAM")
-	BASE=$(git merge-base @ "$UPSTREAM")
+
+	REMOTE=$(git rev-parse --abbrev-ref ${u} | sed 's/\// /g' | cut -f1) # upstream name
+	LOCAL=$(git rev-parse HEAD)
+
 	cd - > /dev/null
 
 	if [ $LOCAL = $REMOTE ]; then
 		return -1;
-	elif [ $LOCAL = $BASE ]; then
-		return 0;
 	else
-		# branches diverged, can't update
-		return -1;
+		return 0;
 	fi
 }
 
