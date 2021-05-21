@@ -1,0 +1,12 @@
+[user]
+	email = fabienduterte@mailfence.com
+	name = Hypario
+[credential]
+	helper = store
+[credential "github.com"]
+	useHttpPath = true
+[credential "gitlab.com"]
+	useHttpPath = true
+[core]
+	editor = vim
+	autocrlf = input
