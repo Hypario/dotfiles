@@ -53,8 +53,7 @@ checkUpdate() {
 }
 
 updateDotfiles() {
-	checkUpdate
-	if [ $? -eq 0 ]; then
+	if ( checkInternet ) && checkUpdate; then
 		prompt "Update detected for your dotfiles, do you wanna update ? (y/n) " choice
 		choice=$(echo "$choice" | tr '[:upper:]' '[:lower:]')
 		if [[ "$choice" =~ ^(yes|y)$ ]]; then
@@ -63,4 +62,42 @@ updateDotfiles() {
 			cd - > /dev/null
 		fi
 	fi
+}
+
+checkInternet() {
+	info "testing internet connection to check if dotfiles updates are needed"
+	# todo : if no internet connection, do not check after a while
+	# stackoverflow https://stackoverflow.com/questions/929368/how-to-test-an-internet-connection-with-bash
+
+	declare -a test_urls=("https://www.google.com/", "https://www.microsoft.com/", "https://www.cloudflare.com/")
+
+	processes="0"
+	pids=()
+
+	for test_url in ${test_urls[@]}; do
+		curl --silent --head $test_url > /dev/null &
+		pids+="$!"
+		processes=$(($processes + 1))
+	done
+
+	while [ $processes -gt 0 ]; do
+		for pid in $pids; do
+			if ! ps | grep "$pid" > /dev/null; then
+				# Process no longer running
+				processes=$(($processes - 1))
+				pids=( "${pids[@]/$pid}" )
+
+				if wait $pid; then
+					# Success! We have a connection to at least one public site, so the
+					# internet is up. Ignore other exit statuses.
+					kill -TERM $pids > /dev/null 2>&1 || true
+					return 0
+				fi
+			fi
+		done
+		# wait -n $pids # Better than sleep, but not supported on all systems
+		sleep 0.1
+	done
+
+	return 1
 }
