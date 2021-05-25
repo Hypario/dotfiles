@@ -30,6 +30,15 @@ if [[ "$choice" =~ ^(yes|y)$ ]]; then
 	sudo apt install curl vim zsh git -y
 	success "done"
 
+	# install tmux
+	prompt "Install tmux ? (y/n) " answer_tmux
+	answer_tmux=${answer_tmux,,}
+	if [[ "$answer_tmux" =~ ^(yes|y)$ ]]; then
+		info "installing tmux"
+		sudo apt install tmux
+		success "tmux installed"	
+	fi
+
 	# install vscodium
 	prompt "Install vscodium ? (y/n) " answer_vscodium
 	answer_vscodium=${answer_vscodium,,}
@@ -38,7 +47,7 @@ if [[ "$choice" =~ ^(yes|y)$ ]]; then
 		wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | gpg --dearmor | sudo dd of=/etc/apt/trusted.gpg.d/vscodium.gpg
 		echo 'deb https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/debs/ vscodium main' | sudo tee --append /etc/apt/sources.list.d/vscodium.list
 		sudo apt update && sudo apt install codium -y
-		success "done"
+		success "vscodium installed"
 	fi
 
 	# install nvm
@@ -47,7 +56,7 @@ if [[ "$choice" =~ ^(yes|y)$ ]]; then
 	if [[ "$answer_nvm" =~ ^(yes|y)$ ]]; then
 		info "installing nvm"
 		wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
-		success "done"
+		success "nvm installed"
 	fi
 
 	# installing oh-my-zsh
@@ -56,11 +65,11 @@ if [[ "$choice" =~ ^(yes|y)$ ]]; then
 	if [[ "$answer_omz" =~ "^(yes|y)$" ]]; then
 		info "install oh-my-zsh"
 		sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" -unattended
-		success "done"
+		success "oh-my-zsh installed"
 
 		info "installing font for zsh theme"
 		sudo apt install fonts-powerline
-		success "done"
+		success "font installed"
 	fi
 
 	# installing zsh-autosuggestions
@@ -69,7 +78,7 @@ if [[ "$choice" =~ ^(yes|y)$ ]]; then
 	if [[ "$answer_autosugg" =~ ^(yes|y)$ ]]; then
 		info "install zsh-autossuggestions"
 		git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-		success "done"
+		success "zsh-autossugestions installed"
 	fi
 
 	# install discord
@@ -80,7 +89,7 @@ if [[ "$choice" =~ ^(yes|y)$ ]]; then
 		TEMP_DEB="$(mktemp)"
 		wget -O "$TEMP_DEB" 'https://discord.com/api/download?platform=linux&format=deb' | sudo dpkg -i "$TEMP_DEB"
 		rm -rf "$TEMP_DEB"
-		success "done"
+		success "discord installed"
 	fi
 
 	symlinker
