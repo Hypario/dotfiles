@@ -65,11 +65,23 @@ updateDotfiles() {
 }
 
 checkInternet() {
-	info "testing internet connection to check if dotfiles updates are needed"
-	# todo : if no internet connection, do not check after a while
 	# stackoverflow https://stackoverflow.com/questions/929368/how-to-test-an-internet-connection-with-bash
 
 	declare -a test_urls=("https://www.google.com/", "https://www.microsoft.com/", "https://www.cloudflare.com/")
+
+	if [[ -f $HOME/dotfiles/.update.lock && -s $HOME/dotfiles/.update.lock ]]; then
+		typeset -i epoch=$(cat $HOME/dotfiles/.update.lock)
+		now=$(date +%s)
+		if [ $(expr $epoch - $now) -lt 0 ]; then
+			rm $HOME/dotfiles/.update.lock
+		else
+			return 1
+		fi
+	else
+		echo $(date -d "today 23:59:59" +%s) > $HOME/dotfiles/.update.lock
+	fi
+
+	info "testing internet connection to check if dotfiles updates are needed"
 
 	processes="0"
 	pids=()
@@ -99,5 +111,10 @@ checkInternet() {
 		sleep 0.1
 	done
 
+	info "No internet found"
+
+	if [ ! -s $HOME/dotfiles ]; then
+		target=$(date )
+	fi
 	return 1
 }
