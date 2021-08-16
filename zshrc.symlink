@@ -100,7 +100,9 @@ source $ZSH/oh-my-zsh.sh
 export DEFAULT_USER=hypario
 
 # add intellij to path
-export PATH=$PATH:~/softwares/intellij/bin
+if [ -d ~/softwares/intellij/bin ]; then
+	export PATH=$PATH:~/softwares/intellij/bin
+fi
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
