@@ -118,9 +118,8 @@ if command -v tmux > /dev/null; then
 fi
 
 # import work specific variables if it exists
-if [ -f $HOME/dotfiles/work.sh ]; then
-	source $HOME/dotfiles/work.sh
-fi
+[ -s "$HOME/dotfiles/work.sh" ] && source "$HOME/dotfiles/work.sh"
 
 source $HOME/dotfiles/helpers.sh
 updateDotfiles
+
