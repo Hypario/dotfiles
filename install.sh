@@ -93,4 +93,17 @@ if [[ "$choice" =~ ^(yes|y)$ ]]; then
 	fi
 
 	symlinker
+
+	# install php
+	prompt "Install php ? (y/n) " answer_php
+	answer_php=${answer_php,,}
+	if [[ "$answer_php" =~ ^(yes|y)$ ]]; then
+		info "installing php"
+		
+		sudo apt install software-properties-common
+		sudo add-apt-repository ppa:ondrej/php
+		sudo apt install php8.0 php8.0-pgsql php8.0-common php8.0-xdebug php8.0-zip php8.0-curl php8.0-cli
+		
+		success "php installed"
+	fi
 fi
