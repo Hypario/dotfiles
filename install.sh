@@ -27,7 +27,7 @@ if [[ "$choice" =~ ^(yes|y)$ ]]; then
 
 	# install tools
 	info "downloading needed tools if not installed"
-	sudo apt install curl vim zsh git snapd -y
+	sudo apt install curl vim zsh git -y
 	success "done"
 
 	# install tmux
@@ -105,16 +105,5 @@ if [[ "$choice" =~ ^(yes|y)$ ]]; then
 		sudo apt install php8.0 php8.0-pgsql php8.0-common php8.0-xdebug php8.0-zip php8.0-curl php8.0-cli
 		
 		success "php installed"
-	fi
-
-	# install bitwarden
-	prompt "Install Bitwarden cli ? (y/n) " answer_bw
-	answer_bw=${answer_bw,,}
-	if [[ "$answer_bw" =~ ^(yes|y)$ ]]; then
-		info "installing Bitwarden cli"
-
-		sudo snap install bw
-
-		success "Bitwarden installed"
 	fi
 fi
