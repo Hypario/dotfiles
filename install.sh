@@ -62,9 +62,9 @@ if [[ "$choice" =~ ^(yes|y)$ ]]; then
 	# installing oh-my-zsh
 	prompt "Install oh-my-zsh ? (y/n) " answer_omz
 	answer_omz=${answer_omz,,}
-	if [[ "$answer_omz" =~ "^(yes|y)$" ]]; then
+	if [[ "$answer_omz" =~ ^(yes|y)$ ]]; then
 		info "install oh-my-zsh"
-		sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" -unattended
+		sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 		success "oh-my-zsh installed"
 
 		info "installing font for zsh theme"
