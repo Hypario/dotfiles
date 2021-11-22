@@ -60,6 +60,7 @@ updateDotfiles() {
 			cd $HOME/dotfiles > /dev/null
 			git pull
 			cd - > /dev/null
+			symlinker
 		fi
 	fi
 }
