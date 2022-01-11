@@ -100,8 +100,8 @@ source $ZSH/oh-my-zsh.sh
 export DEFAULT_USER=hypario
 
 # add intellij to path
-if [ -d ~/softwares/intellij/bin ]; then
-	export PATH=$PATH:~/softwares/intellij/bin
+if [ -d ~/softwares/JetBrainsGateway/bin ]; then
+	export PATH=$PATH:~/softwares/JetBrainsGateway/bin
 fi
 
 export NVM_DIR="$HOME/.nvm"
@@ -112,6 +112,7 @@ alias myip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias reload="exec $SHELL -l"
 alias update="sudo apt update && sudo apt upgrade -y"
 alias ubuntu-update="sudo do-release-upgrade"
+alias currdir="xdg-open ."
 
 if command -v tmux > /dev/null; then
 	[[ ! $TERM =~ screen ]] && [ -z $TMUX ] && exec tmux

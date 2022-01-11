@@ -49,6 +49,14 @@ if [[ "$choice" =~ ^(yes|y)$ ]]; then
 		sudo apt update && sudo apt install codium -y
 		success "vscodium installed"
 	fi
+	# install jetbrains toolbox
+	prompt "Install jetbrains toolbox ? (y/n) " answer_toolbox
+	answer_toolbox=${answer_toolbox,,}
+	if [[ "answer_toolbox" =~ ^(yes|y)$ ]]; then
+		info "installing jetbrains toolbox"
+		curl -fsSL https://raw.githubusercontent.com/nagygergo/jetbrains-toolbox-install/master/jetbrains-toolbox.sh | bash
+		success "jetbrains toolbox installed"
+	fi
 
 	# install nvm
 	prompt "Install nvm ? (y/n) " answer_nvm
