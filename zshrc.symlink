@@ -114,10 +114,6 @@ alias update="sudo apt update && sudo apt upgrade -y"
 alias ubuntu-update="sudo do-release-upgrade"
 alias currdir="xdg-open ."
 
-if command -v tmux > /dev/null; then
-	[[ ! $TERM =~ screen ]] && [ -z $TMUX ] && exec tmux
-fi
-
 # import work specific variables if it exists
 [ -s "$HOME/dotfiles/work.sh" ] && source "$HOME/dotfiles/work.sh"
 

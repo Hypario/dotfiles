@@ -30,15 +30,6 @@ if [[ "$choice" =~ ^(yes|y)$ ]]; then
 	sudo apt install curl vim zsh git -y
 	success "done"
 
-	# install tmux
-	prompt "Install tmux ? (y/n) " answer_tmux
-	answer_tmux=${answer_tmux,,}
-	if [[ "$answer_tmux" =~ ^(yes|y)$ ]]; then
-		info "installing tmux"
-		sudo apt install tmux
-		success "tmux installed"	
-	fi
-
 	# install vscodium
 	prompt "Install vscodium ? (y/n) " answer_vscodium
 	answer_vscodium=${answer_vscodium,,}
