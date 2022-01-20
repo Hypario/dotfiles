@@ -78,6 +78,8 @@ if [[ "$choice" =~ ^(yes|y)$ ]]; then
 		info "installing font for zsh theme"
 		sudo apt install fonts-powerline
 		success "font installed"
+
+		chsh -s $(which zsh)
 	fi
 
 	# installing zsh-autosuggestions
