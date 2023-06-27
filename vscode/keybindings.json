@@ -1,0 +1,67 @@
+// Place your key bindings in this file to override the defaults
+[
+    {
+        "key": "alt+s",
+        "command": "multiCommand.makeRoom",
+    },
+    {
+        "key": "alt+s",
+        "command": "workbench.view.explorer",
+        "when": "activeViewlet != 'workbench.view.explorer' && sideBarVisible"
+    },
+    {
+        "key": "ctrl+e",
+        "command": "editor.action.smartSelect.expand",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+d",
+        "command": "editor.action.copyLinesDownAction",
+        "when": "editorTextFocus && !editorReadonly"
+    },
+    {
+        "key": "ctrl+shift+e",
+        "command": "editor.action.addSelectionToNextFindMatch",
+        "when": "editorFocus"
+    },
+    {
+        "key": "ctrl+o",
+        "command": "workbench.action.quickOpen"
+    },
+    {
+        "key": "ctrl+shift+o",
+        "command": "revealFileInOS"
+    },
+    {
+        "key": "ctrl+p",
+        "command": "workbench.action.showCommands"
+    },
+    {
+        "key": "ctrl+r",
+        "command": "workbench.action.gotoSymbol",
+    },
+    {
+        "key": "ctrl+n",
+        "command": "explorer.newFile"
+    },
+    {
+        "key": "ctrl+alt+l",
+        "command": "editor.action.formatDocument",
+    },
+    {
+        "key": "ctrl+t",
+        "command": "workbench.action.terminal.toggleTerminal"
+    },
+    {
+        "key": "ctrl+k",
+        "command": "workbench.view.scm"
+    },
+    {
+        "key": "ctrl+right",
+        "command": "workbench.action.nextEditorInGroup"
+    },
+    {
+        "key": "ctrl+left",
+        "command": "workbench.action.previousEditorInGroup"
+    }
+]

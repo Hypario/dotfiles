@@ -31,14 +31,20 @@ if [[ "$choice" =~ ^(yes|y)$ ]]; then
 	success "done"
 
 	# install vscodium
-	prompt "Install vscodium ? (y/n) " answer_vscodium
-	answer_vscodium=${answer_vscodium,,}
-	if [[ "$answer_vscodium" =~ ^(yes|y)$ ]]; then
-		info "installing vscodium"
-		wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | gpg --dearmor | sudo dd of=/etc/apt/trusted.gpg.d/vscodium.gpg
-		echo 'deb https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/debs/ vscodium main' | sudo tee --append /etc/apt/sources.list.d/vscodium.list
-		sudo apt update && sudo apt install codium -y
-		success "vscodium installed"
+	prompt "Install vscode ? (y/n) " answer_vscode
+	answer_vscode=${answer_vscode,,}
+	if [[ "$answer_vscode" =~ ^(yes|y)$ ]]; then
+		info "installing vscode"
+		wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+		sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+		sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+		rm -f packages.microsoft.gpg
+
+		sudo apt install apt-transport-https
+		sudo apt update
+		sudo apt install code
+
+		success "vscode installed"
 	fi
 	# install jetbrains toolbox
 	prompt "Install jetbrains toolbox ? (y/n) " answer_toolbox

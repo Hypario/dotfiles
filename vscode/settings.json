@@ -1,0 +1,94 @@
+{
+    "window.zoomLevel": 0,
+    "editor.minimap.enabled": false,
+    "editor.formatOnSave": false,
+    "editor.formatOnPaste": false,
+    "editor.renderWhitespace": "trailing",
+    "editor.linkedEditing": true,
+    "editor.occurrencesHighlight": false,
+    "editor.suggest.insertMode": "replace",
+    "editor.acceptSuggestionOnCommitCharacter": false,
+    "editor.unicodeHighlight.nonBasicASCII": false,
+    "editor.fontFamily": "JetBrains Mono, Consolas, 'Courier New, monospace",
+    "editor.fontLigatures": true,
+    "editor.lineHeight": 28,
+    "editor.fontSize": 17,
+
+    "files.autoSave": "onFocusChange",
+    "files.exclude": {
+        "**/.git": true,
+        "**/.idea": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true
+    },
+
+    "explorer.autoReveal": false,
+    "explorer.confirmDragAndDrop": false,
+    "explorer.confirmDelete": false,
+
+    "workbench.tree.indent": 15,
+    "workbench.tree.renderIndentGuides": "always",
+    "workbench.editor.enablePreview": false,
+
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.colorTheme": "Tokyo Night Storm",
+    "workbench.colorCustomizations":  {
+        "[Tokyo Night Storm]": {
+            "editor.selectionBackground": "#3D59A1",
+            "editor.selectionHighlightBackground": "#3D59A1"
+        }
+    },
+
+    "emmet.triggerExpansionOnTab": true,
+
+    "git.confirmSync": true,
+    "git.enableSmartCommit": true,
+
+    "gitlens.currentLine.enabled": false,
+    "gitlens.codeLens.enabled": false,
+    "gitlens.hovers.currentLine.over": "line",
+
+    "multiCommand.commands": [
+        {
+            "command": "multiCommand.makeRoom",
+            "sequence": [
+                "workbench.action.toggleSidebarVisibility",
+                "workbench.action.toggleActivityBarVisibility"
+            ]
+        }
+    ],
+
+    // WSL integration
+    "terminal.integrated.shell.windows": "C:\\WINDOWS\\System32\\wsl.exe",
+    "terminal.integrated.fontFamily": "Ubuntu Mono derivative Powerline",
+    
+    "[python]": {
+        "editor.formatOnType": true
+    },
+
+    // for open computer coding
+    "Lua.telemetry.enable": false,
+
+    "security.workspace.trust.untrustedFiles": "open",
+    "editor.tokenColorCustomizations": {
+        "textMateRules": [
+            {
+                "name": "envKeys",
+                "scope": "string.quoted.single.ini,constant.numeric.ini,string.quoted.double.ini",
+                "settings": {
+                    "foreground": "#19354900"
+                }
+            }
+        ]
+    },
+
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+}
