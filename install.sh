@@ -45,6 +45,7 @@ if [[ "$choice" =~ ^(yes|y)$ ]]; then
 		sudo apt install code
 
 		success "vscode installed"
+		source vscode/configure.sh
 	fi
 	# install jetbrains toolbox
 	prompt "Install jetbrains toolbox ? (y/n) " answer_toolbox
