@@ -1,6 +1,10 @@
 [user]
 	email = fabienduterte@mailfence.com
 	name = Hypario
+
+[includeIf "gitdir:~/work/**/.git"]
+	path = ~/work/.gitconfig-work
+
 [credential]
 	helper = store
 [credential "github.com"]
