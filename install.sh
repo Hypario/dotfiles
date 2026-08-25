@@ -50,7 +50,7 @@ if [[ "$choice" =~ ^(yes|y)$ ]]; then
 	# install jetbrains toolbox
 	prompt "Install jetbrains toolbox ? (y/n) " answer_toolbox
 	answer_toolbox=${answer_toolbox,,}
-	if [[ "answer_toolbox" =~ ^(yes|y)$ ]]; then
+	if [[ "$answer_toolbox" =~ ^(yes|y)$ ]]; then
 		info "installing jetbrains toolbox"
 		curl -fsSL https://raw.githubusercontent.com/nagygergo/jetbrains-toolbox-install/master/jetbrains-toolbox.sh | bash
 		success "jetbrains toolbox installed"
@@ -82,7 +82,7 @@ if [[ "$choice" =~ ^(yes|y)$ ]]; then
 
 	# installing zsh-autosuggestions
 	prompt "Install zsh-autossuggestions ? (y/n) " answer_autosugg
-	answer_autosugg=${answer_autosugg}
+	answer_autosugg=${answer_autosugg,,}
 	if [[ "$answer_autosugg" =~ ^(yes|y)$ ]]; then
 		info "install zsh-autossuggestions"
 		git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
@@ -95,7 +95,7 @@ if [[ "$choice" =~ ^(yes|y)$ ]]; then
 	if [[ "$answer_discord" =~ ^(yes|y)$ ]]; then
 		info "installing discord"
 		TEMP_DEB="$(mktemp)"
-		wget -O "$TEMP_DEB" 'https://discord.com/api/download?platform=linux&format=deb' | sudo dpkg -i "$TEMP_DEB"
+		wget -O "$TEMP_DEB" 'https://discord.com/api/download?platform=linux&format=deb' && sudo dpkg -i "$TEMP_DEB"
 		rm -rf "$TEMP_DEB"
 		success "discord installed"
 	fi
