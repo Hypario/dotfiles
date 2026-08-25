@@ -115,9 +115,9 @@ alias ubuntu-update="sudo do-release-upgrade"
 alias currdir="xdg-open ."
 alias copy="xclip -selection clipboard" # example usage : pwd | copy
 
-# import work specific variables if it exists
-[ -s "$HOME/dotfiles/work.sh" ] && source "$HOME/dotfiles/work.sh"
-
 source $HOME/dotfiles/helpers.sh
 updateDotfiles
+syncBitwardenVault
 
+# import work specific variables if it exists
+[ -s "$HOME/dotfiles/work.sh" ] && source "$HOME/dotfiles/work.sh"

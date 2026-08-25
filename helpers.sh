@@ -12,8 +12,12 @@ success() {
   printf "\r\033[2K [ \033[00;32mOK\033[0m ] $1\n"
 }
 
-fail() {
+error() {
   printf "\r\033[2K [\033[0;31mFAIL\033[0m] $1\n"
+}
+
+fail() {
+  error $1
   echo ''
   exit $?
 }
@@ -36,6 +40,19 @@ symlinker() {
   done
   
   success "done"
+}
+
+daily_lock() {
+  local lock="$HOME/.cache/dotfiles/$1.lock"
+    if [[ -s "$lock" ]]; then
+      typeset -i epoch=$(cat "$lock")
+      if [ $(($epoch - $(date +%s))) -gt 0 ]; then
+        return 1
+      fi
+    fi
+    mkdir -p "$(dirname "$lock")"
+    echo $(date -d "today 23:59:59" +%s) > "$lock"
+    return 0
 }
 
 checkUpdate() {
@@ -70,17 +87,7 @@ checkInternet() {
 
 	declare -a test_urls=("https://www.google.com/", "https://www.microsoft.com/", "https://www.cloudflare.com/")
 
-	if [[ -f $HOME/dotfiles/.update.lock && -s $HOME/dotfiles/.update.lock ]]; then
-		typeset -i epoch=$(cat $HOME/dotfiles/.update.lock)
-		now=$(date +%s)
-		if [ $(expr $epoch - $now) -lt 0 ]; then
-			rm $HOME/dotfiles/.update.lock
-		else
-			return 1
-		fi
-	else
-		echo $(date -d "today 23:59:59" +%s) > $HOME/dotfiles/.update.lock
-	fi
+  daily_lock update || return 1
 
 	info "testing internet connection to check if dotfiles updates are needed"
 
@@ -116,3 +123,67 @@ checkInternet() {
 
 	return 1
 }
+
+bw() {
+  # certificate used for bitwarden cli to avoid SSL errors
+  NODE_EXTRA_CA_CERTS=/etc/ssl/certs/ca-certificates.crt command bw "$@"
+}
+
+bw_ensure_unlock() {
+  # Stage 1: try the keyring cache
+  if [ -z "$BW_SESSION" ]; then
+    export BW_SESSION="$(keyctl pipe %user:bw_session 2>/dev/null)"
+  fi
+
+  # Stage 2: cache miss → unlock interactively and store it
+  if ! bw status --session "$BW_SESSION" 2>/dev/null | grep -q '"status":"unlocked"'; then
+    info "unlocking bitwarden vault" >&2
+    export BW_SESSION="$(bw unlock --raw)" || return 1
+    echo -n "$BW_SESSION" | keyctl padd user bw_session @u > /dev/null
+  fi
+}
+
+bw_secret() {
+  local key="secret_$1"
+  local value="$(keyctl pipe %user:$key 2>/dev/null)"
+
+  if [ -z "$value" ]; then
+    # cache miss -> we need to fetch the secret from bitwarden
+    bw_ensure_unlock
+    syncBitwardenVault
+    info "fetching $1 from bitwarden" >&2
+    value=$(bw get password "$1" --session "$BW_SESSION") || return 1
+    echo -n "$value" | keyctl padd user "$key" @u > /dev/null
+  fi
+
+  echo "$value"
+}
+
+bw_cache_clear() {
+  local id
+  for id in $(keyctl rlist @u 2>/dev/null); do
+    if keyctl describe "$id" 2>/dev/null | grep -q "secret_"; then
+      keyctl unlink "$id" @u 2>/dev/null
+    fi
+  done
+}
+
+syncBitwardenVault() {
+  daily_lock bw_sync || return 1
+  bw_ensure_unlock
+  info "Syncing bitwarden vault" >&2
+  if bw sync --session "$BW_SESSION" > /dev/null 2>&1; then
+    bw_cache_clear
+    success "Bitwarden vault synced" >&2
+  else
+    error "Failed to sync Bitwarden vault, using local cache" >&2
+  fi
+}
+
+resetBw() {
+  bw_cache_clear
+  keyctl unlink %user:bw_session @u 2>/dev/null
+  unset BW_SESSION
+  success "bitwarden cache and session cleared" >&2
+}
+

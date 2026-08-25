@@ -27,7 +27,10 @@ if [[ "$choice" =~ ^(yes|y)$ ]]; then
 
 	# install tools
 	info "downloading needed tools if not installed"
-	sudo apt install curl vim zsh git -y
+	sudo apt install curl vim zsh git keyutils -y
+
+	info "install bitwarden-cli, which is required for secrets management"
+	sudo snap install bw
 	success "done"
 
 	# install vscodium
