@@ -46,7 +46,7 @@ checkUpdate() {
 
 	cd - > /dev/null
 	if [ $LOCAL = $REMOTE ]; then
-		return -1;
+		return 1;
 	else
 		return 0;
 	fi
@@ -114,8 +114,5 @@ checkInternet() {
 
 	info "No internet found"
 
-	if [ ! -s $HOME/dotfiles ]; then
-		target=$(date )
-	fi
 	return 1
 }
