@@ -33,8 +33,16 @@ symlinker() {
   local overwrite=true overwrite_all=true backup_all=false skip_all=false
 
   for file in $(find -H "$HOME/dotfiles" -maxdepth 3 -name '*.symlink'); do
-    local dest="$HOME/.$(basename "${file%.*}")"
+    local rel="${file#$HOME/dotfiles/}"
+    local dest
+    if [[ "$rel" == */* ]]; then
+      # nested: mirror the folder structure under $HOME (e.g. docker/config.json.symlink -> ~/.docker/config.json)
+      dest="$HOME/.$(dirname "$rel")/$(basename "${file%.*}")"
+    else
+      dest="$HOME/.$(basename "${file%.*}")"
+    fi
 
+    mkdir -p "$(dirname "$dest")"
     ln -sf "$file" "$dest"
     success "linked $file to $dest"
   done
@@ -143,6 +151,27 @@ bw_ensure_unlock() {
   fi
 }
 
+bw_get_password() {
+  local value
+  info "fetching password of '$1' from bitwarden" >&2
+  value=$(bw get password "$1" --session "$BW_SESSION") || { error "Password for item '$1' not found" >&2; return 1; }
+  echo "$value"
+}
+
+bw_get_username() {
+  local value
+  info "fetching username of '$1' from bitwarden" >&2
+  value=$(bw get username "$1" --session "$BW_SESSION") || { error "Username for item '$1' not found" >&2; return 1; }
+  echo "$value"
+}
+
+bw_get_uri() {
+  local value
+  info "fetching uri of '$1' from bitwarden" >&2
+  value=$(bw get uri "$1" --session "$BW_SESSION") || { error "URI for item '$1' not found" >&2; return 1; }
+  echo "$value"
+}
+
 bw_secret() {
   local key="secret_$1"
   local value="$(keyctl pipe %user:$key 2>/dev/null)"
@@ -151,12 +180,26 @@ bw_secret() {
     # cache miss -> we need to fetch the secret from bitwarden
     bw_ensure_unlock
     syncBitwardenVault
-    info "fetching $1 from bitwarden" >&2
-    value=$(bw get password "$1" --session "$BW_SESSION") || return 1
+    value=$(bw_get_password "$1") || return 1
     echo -n "$value" | keyctl padd user "$key" @u > /dev/null
   fi
 
   echo "$value"
+}
+
+dockerLogin() {
+  local item="${1:-JFrog_work_token}"
+  bw_ensure_unlock
+  local registry user
+  if [ -n "$2" ]; then
+    registry="$2"
+  else
+    registry="$(bw_get_uri "$item")" || return 1
+  fi
+  user="$(bw_get_username "$item")" || return 1
+  [ -n "$registry" ] || { error "no registry for '$item': pass one as argument or set the URI field in the bitwarden item" >&2; return 1; }
+  [ -n "$user" ] || { error "no username found in bitwarden item '$item'" >&2; return 1; }
+  bw_secret "$item" | docker login "$registry" -u "$user" --password-stdin
 }
 
 bw_cache_clear() {
@@ -169,6 +212,9 @@ bw_cache_clear() {
 }
 
 syncBitwardenVault() {
+  if [ "$1" = "--force" ] || [ "$1" = "-f" ]; then
+    rm -f "$HOME/.cache/dotfiles/bw_sync.lock"
+  fi
   daily_lock bw_sync || return 1
   bw_ensure_unlock
   info "Syncing bitwarden vault" >&2

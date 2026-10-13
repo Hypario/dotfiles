@@ -1,0 +1,6 @@
+{
+	"auths": {
+		"adeo-docker.jfrog.io": {}
+	},
+	"credsStore": "secretservice"
+}
