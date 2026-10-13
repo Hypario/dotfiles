@@ -188,12 +188,25 @@ bw_secret() {
 }
 
 dockerLogin() {
-  local item="${1:-JFrog_work_token}"
+  local registry=""
+  local item="JFrog_work_token"
+  local OPTIND opt
+  while getopts ":r:i:h" opt; do
+    case "$opt" in
+      r) registry="$OPTARG" ;;
+      i) item="$OPTARG" ;;
+      h)
+        echo "usage: dockerLogin [-r registry] [-i bitwarden item]" >&2
+        echo "  -r  registry to log into (default: URI field of the bitwarden item)" >&2
+        echo "  -i  bitwarden item holding the credentials (default: JFrog_work_token)" >&2
+        return 0 ;;
+      :) error "option -$OPTARG requires an argument" >&2; return 1 ;;
+      \?) error "unknown option -$OPTARG" >&2; return 1 ;;
+    esac
+  done
   bw_ensure_unlock
-  local registry user
-  if [ -n "$2" ]; then
-    registry="$2"
-  else
+  local user
+  if [ -z "$registry" ]; then
     registry="$(bw_get_uri "$item")" || return 1
   fi
   user="$(bw_get_username "$item")" || return 1
