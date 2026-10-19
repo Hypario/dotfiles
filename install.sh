@@ -32,7 +32,11 @@ if confirm choice "Are you sure you want to continue ? (y/n) "; then
 
 	# install tools
 	info "downloading needed tools if not installed"
-	sudo apt install curl vim zsh git keyutils golang-docker-credential-helpers -y
+	sudo apt install curl vim zsh git keyutils golang-docker-credential-helpers bat -y
+
+  # linking batcat to bat
+	mkdir -p ~/.local/bin
+	ln -s /usr/bin/batcat ~/.local/bin/bat
 
 	info "install bitwarden-cli, which is required for secrets management"
 	sudo snap install bw

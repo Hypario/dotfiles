@@ -98,6 +98,7 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 export DEFAULT_USER=hypario
+export MANPAGER="bat -plman"
 
 # add intellij to path
 if [ -d ~/softwares/JetBrainsGateway/bin ]; then
@@ -114,6 +115,10 @@ alias update="sudo apt update && sudo apt upgrade -y"
 alias ubuntu-update="sudo do-release-upgrade"
 alias currdir="xdg-open ."
 alias copy="xclip -selection clipboard" # example usage : pwd | copy
+
+# replace the --help of commands for syntax highlighting
+alias -g -- -h='-h 2>&1 | bat --language=help --style=plain'
+alias -g -- --help='--help 2>&1 | bat --language=help --style=plain'
 
 source $HOME/dotfiles/helpers.sh
 updateDotfiles
