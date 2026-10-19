@@ -32,7 +32,7 @@ symlinker() {
 
   local overwrite=true overwrite_all=true backup_all=false skip_all=false
 
-  for file in $(find -H "$HOME/dotfiles" -maxdepth 3 -name '*.symlink'); do
+  for file in $(find -H "$HOME/dotfiles" -maxdepth 5 -name '*.symlink'); do
     local rel="${file#$HOME/dotfiles/}"
     local dest
     if [[ "$rel" == */* ]]; then
