@@ -146,7 +146,17 @@ bw_ensure_unlock() {
   # Stage 2: cache miss → unlock interactively and store it
   if ! bw status --session "$BW_SESSION" 2>/dev/null | grep -q '"status":"unlocked"'; then
     info "unlocking bitwarden vault" >&2
-    export BW_SESSION="$(bw unlock --raw)" || return 1
+    local session
+    if ! session="$(bw unlock --raw)" || [ -z "$session" ]; then
+      # Last resort: unlock failed, check whether the user is logged in
+      if bw status 2>/dev/null | grep -q '"status":"unauthenticated"'; then
+        info "not logged in to bitwarden, logging in" >&2
+        session="$(bw login --raw)" || return 1
+      else
+        return 1
+      fi
+    fi
+    export BW_SESSION="$session"
     echo -n "$BW_SESSION" | keyctl padd user bw_session @u > /dev/null
   fi
 }
