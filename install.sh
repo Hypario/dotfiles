@@ -15,6 +15,18 @@ confirm() {
 	[[ "$value" =~ ^(yes|y)$ ]]
 }
 
+# Usage: should_install <name> <presence-check> [always]
+# Returns 0 if the install should proceed, 1 if already installed (or declined).
+# With mode "always", installs missing tools without prompting.
+should_install() {
+	local name=$1 check=$2 mode=${3:-ask}
+	if eval "$check"; then
+		info "$name already installed, skipping"
+		return 1
+	fi
+	[ "$mode" = "always" ] || confirm answer "Install $name ? (y/n) "
+}
+
 echo "This script will modify your home directory"
 
 if confirm choice "Are you sure you want to continue ? (y/n) "; then
@@ -36,14 +48,21 @@ if confirm choice "Are you sure you want to continue ? (y/n) "; then
 
   # linking batcat to bat
 	mkdir -p ~/.local/bin
-	ln -s /usr/bin/batcat ~/.local/bin/bat
+	ln -sf /usr/bin/batcat ~/.local/bin/bat
 
-	info "install bitwarden-cli, which is required for secrets management"
-	sudo snap install bw
-	success "done"
+	# install bitwarden-cli, which is required for secrets management
+	if should_install "bitwarden-cli" "command -v bw &> /dev/null" always; then
+		sudo snap install bw
+		success "done"
+	fi
 
-	# install vscodium
-	if confirm answer "Install vscode ? (y/n) "; then
+	if should_install "mise" "command -v mise &> /dev/null || [ -x '$HOME/.local/bin/mise' ]" always; then
+		info "installing mise"
+		curl -fsSL https://mise.run | sh
+	fi
+
+	# install vscode
+	if should_install "vscode" "command -v code &> /dev/null"; then
 		info "installing vscode"
 		wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
 		sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
@@ -58,21 +77,21 @@ if confirm choice "Are you sure you want to continue ? (y/n) "; then
 		source vscode/configure.sh
 	fi
 	# install jetbrains toolbox
-	if confirm answer "Install jetbrains toolbox ? (y/n) "; then
+	if should_install "jetbrains toolbox" "command -v jetbrains-toolbox &> /dev/null || [ -d '$HOME/.local/share/JetBrains/Toolbox' ]"; then
 		info "installing jetbrains toolbox"
 		curl -fsSL https://raw.githubusercontent.com/nagygergo/jetbrains-toolbox-install/master/jetbrains-toolbox.sh | bash
 		success "jetbrains toolbox installed"
 	fi
 
 	# install nvm
-	if confirm answer "Install nvm ? (y/n) "; then
+	if should_install "nvm" "[ -d '$HOME/.nvm' ]"; then
 		info "installing nvm"
 		wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
 		success "nvm installed"
 	fi
 
 	# installing oh-my-zsh
-	if confirm answer "Install oh-my-zsh ? (y/n) "; then
+	if should_install "oh-my-zsh" "[ -d '$HOME/.oh-my-zsh' ]"; then
 		info "install oh-my-zsh"
 		sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 		success "oh-my-zsh installed"
@@ -85,14 +104,14 @@ if confirm choice "Are you sure you want to continue ? (y/n) "; then
 	fi
 
 	# installing zsh-autosuggestions
-	if confirm answer "Install zsh-autossuggestions ? (y/n) "; then
-		info "install zsh-autossuggestions"
+	if should_install "zsh-autosuggestions" "[ -d '${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions' ]"; then
+		info "install zsh-autosuggestions"
 		git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-		success "zsh-autossugestions installed"
+		success "zsh-autosuggestions installed"
 	fi
 
 	# install discord
-	if confirm answer "Install discord ? (y/n) "; then
+	if should_install "discord" "command -v discord &> /dev/null"; then
 		info "installing discord"
 		TEMP_DEB="$(mktemp)"
 		wget -O "$TEMP_DEB" 'https://discord.com/api/download?platform=linux&format=deb' && sudo dpkg -i "$TEMP_DEB"
@@ -103,7 +122,7 @@ if confirm choice "Are you sure you want to continue ? (y/n) "; then
 	symlinker
 
 	# install php
-	if confirm answer "Install php ? (y/n) "; then
+	if should_install "php" "command -v php &> /dev/null"; then
 		info "installing php"
 		
 		sudo apt install software-properties-common

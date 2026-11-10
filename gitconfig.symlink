@@ -2,7 +2,7 @@
 	email = fabienduterte@mailfence.com
 	name = Hypario
 
-[includeIf "gitdir:~/work/**/*.git"]
+[includeIf "gitdir:~/work/**/"]
 	path = ~/work/.gitconfig-work
 
 [credential]
